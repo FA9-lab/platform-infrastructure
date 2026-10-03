@@ -91,3 +91,12 @@ spec:
           subnetId: ${{ parameters.subnetId }}
           vmSize: ${{ parameters.vmSize }}
           adminSshPublicKey: ${{ parameters.adminSshPublicKey }}
+          
+    - id: publish
+      name: Publish Deployment Repository
+      action: publish:github
+      input:
+        repoUrl: github.com?owner=FA9-lab&repo=vm-${{ parameters.application }}-${{ parameters.region }}-a7k29q-${{ parameters.requestId }}
+        defaultBranch: main
+        description: Azure VM deployment managed by PELab IDP
+        repoVisibility: public
