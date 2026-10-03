@@ -75,3 +75,18 @@ spec:
           title: SSH Public Key
           type: string
           description: Public SSH key used for VM administrative access
+  steps:
+    - id: generate
+      name: Generate Azure VM Deployment
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          application: ${{ parameters.application }}
+          environment: ${{ parameters.environment }}
+          requestId: ${{ parameters.requestId }}
+          region: ${{ parameters.region }}
+          resourceGroup: ${{ parameters.resourceGroup }}
+          subnetId: ${{ parameters.subnetId }}
+          vmSize: ${{ parameters.vmSize }}
+          adminSshPublicKey: ${{ parameters.adminSshPublicKey }}
