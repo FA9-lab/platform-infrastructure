@@ -1,0 +1,77 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+
+metadata:
+  name: azure-linux-vm
+  title: Azure Linux Virtual Machine
+  description: Provision a standardized Azure Linux VM through the platform
+
+spec:
+  owner: user:guest
+  type: infrastructure
+
+  parameters:
+    - title: Deployment Information
+      required:
+        - application
+        - environment
+        - requestId
+      properties:
+        application:
+          title: Application
+          type: string
+          description: Application or workload associated with the VM
+
+        environment:
+          title: Environment
+          type: string
+          enum:
+            - dev
+            - test
+            - prod
+
+        requestId:
+          title: Request / Change ID
+          type: string
+          description: Enterprise request or change record for traceability
+
+    - title: Azure Configuration
+      required:
+        - region
+        - resourceGroup
+        - subnetId
+        - vmSize
+      properties:
+        region:
+          title: Azure Region
+          type: string
+          enum:
+            - eastus
+            - westus2
+
+        resourceGroup:
+          title: Resource Group
+          type: string
+          default: rg-platform-lab
+
+        subnetId:
+          title: Subnet
+          type: string
+          description: Azure subnet resource ID
+
+        vmSize:
+          title: VM Size
+          type: string
+          default: Standard_B2s
+          enum:
+            - Standard_B2s
+            - Standard_D2s_v5
+
+    - title: Administrative Access
+      required:
+        - adminSshPublicKey
+      properties:
+        adminSshPublicKey:
+          title: SSH Public Key
+          type: string
+          description: Public SSH key used for VM administrative access
