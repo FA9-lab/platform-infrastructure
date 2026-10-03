@@ -82,6 +82,7 @@ spec:
       input:
         url: ./skeleton
         values:
+          deploymentId: a7k29q # LAB ONLY - replace with generated ID
           application: ${{ parameters.application }}
           environment: ${{ parameters.environment }}
           requestId: ${{ parameters.requestId }}
