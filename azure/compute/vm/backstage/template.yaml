@@ -100,3 +100,8 @@ spec:
         defaultBranch: main
         description: Azure VM deployment managed by PELab IDP
         repoVisibility: public
+        
+  output:
+    links:
+      - title: Deployment Repository
+        url: ${{ steps['publish'].output.remoteUrl }}
