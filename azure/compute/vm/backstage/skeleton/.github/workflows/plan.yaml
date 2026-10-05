@@ -1,0 +1,14 @@
+name: Infrastructure Plan
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  plan:
+    uses: FA9-lab/platform-workflows/.github/workflows/terraform-plan.yml@feature/deployment-repo-plan
+    with:
+      deployment-name: "${{ values.application }}-${{ values.region }}-${{ values.deploymentId }}-${{ values.requestId }}"
+      working-directory: "."
+    secrets: inherit
