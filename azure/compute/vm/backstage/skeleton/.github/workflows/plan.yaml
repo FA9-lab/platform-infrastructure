@@ -4,7 +4,10 @@ on:
   pull_request:
     branches:
       - main
-
+permissions:
+  id-token: write
+  contents: read
+  
 jobs:
   plan:
     uses: FA9-lab/platform-workflows/.github/workflows/terraform-plan.yml@feature/deployment-repo-plan
