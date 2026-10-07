@@ -1,0 +1,16 @@
+name: Decommission
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  destroy:
+    uses: FA9-lab/platform-workflows/.github/workflows/terraform-destroy.yml@feature/deployment-repo-plan
+    with:
+      deployment-name: "${{ values.application }}-${{ values.region }}-${{ values.deploymentId }}-${{ values.requestId }}"
+      working-directory: "."
+    secrets: inherit
