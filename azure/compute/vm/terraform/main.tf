@@ -1,5 +1,5 @@
 locals {
-  resource_name = "${var.application}-${var.region}-${var.deployment_id}-${var.request_id}"
+  resource_name = "${var.application}-${var.environment}-${var.region}-${var.deployment_id}-${var.request_id}"
 
   common_tags = {
     Application  = var.application
