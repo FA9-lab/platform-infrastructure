@@ -1,5 +1,5 @@
 module "vm" {
-  source = "git::https://github.com/FA9-lab/platform-infrastructure.git//azure/compute/vm/terraform?ref=main"
+  source = "git::https://github.com/FA9-lab/platform-infrastructure.git//azure/compute/vm/terraform?ref=v1.0.0"
 
   application   = "${{ values.application }}"
   environment   = "${{ values.environment }}"
