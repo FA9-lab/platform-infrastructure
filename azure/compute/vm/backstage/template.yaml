@@ -76,13 +76,17 @@ spec:
           type: string
           description: Public SSH key used for VM administrative access
   steps:
+    - id: generateId
+      name: Generate Deployment ID
+      action: platform:generate-deployment-id
+      
     - id: generate
       name: Generate Azure VM Deployment
       action: fetch:template
       input:
         url: ./skeleton
         values:
-          deploymentId: a7k29q # LAB ONLY - replace with generated ID
+          deploymentId: ${{ steps.generateId.output.deploymentId }}
           application: ${{ parameters.application }}
           environment: ${{ parameters.environment }}
           requestId: ${{ parameters.requestId }}
@@ -96,7 +100,7 @@ spec:
       name: Publish Deployment Repository
       action: publish:github
       input:
-        repoUrl: github.com?owner=FA9-lab&repo=vm-${{ parameters.application }}-${{ parameters.region }}-a7k29q-${{ parameters.requestId }}
+        repoUrl: github.com?owner=FA9-lab&repo=vm-${{ parameters.application }}-${{ parameters.region }}-${{ steps.generateId.output.deploymentId }}-${{ parameters.requestId }}
         defaultBranch: main
         description: Azure VM deployment managed by PELab IDP
         repoVisibility: public
