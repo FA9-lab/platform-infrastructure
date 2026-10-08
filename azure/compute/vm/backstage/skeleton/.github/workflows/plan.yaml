@@ -12,6 +12,6 @@ jobs:
   plan:
     uses: FA9-lab/platform-workflows/.github/workflows/terraform-plan.yml@feature/deployment-repo-plan
     with:
-      deployment-name: "${{ values.application }}-${{ values.region }}-${{ values.deploymentId }}-${{ values.requestId }}"
+      deployment-name: "${{ values.application }}-${{ values.environment }}-${{ values.region }}-${{ values.deploymentId }}-${{ values.requestId }}"
       working-directory: "."
     secrets: inherit
