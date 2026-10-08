@@ -100,7 +100,7 @@ spec:
       name: Publish Deployment Repository
       action: publish:github
       input:
-        repoUrl: github.com?owner=FA9-lab&repo=vm-${{ parameters.application }}-${{ parameters.region }}-${{ steps.generateId.output.deploymentId }}-${{ parameters.requestId }}
+        repoUrl: github.com?owner=FA9-lab&repo=vm-${{ parameters.application }}-${{ parameters.environment }}-${{ parameters.region }}-${{ steps.generateId.output.deploymentId }}-${{ parameters.requestId }}
         defaultBranch: main
         description: Azure VM deployment managed by PELab IDP
         repoVisibility: public
