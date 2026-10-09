@@ -290,3 +290,61 @@ but their Azure infrastructure has been decommissioned.
 
 This procedure is documented without performing a live
 infrastructure upgrade.
+
+## 7. Failed Upgrade Recovery
+
+### Immediate Response
+
+If a module upgrade fails during Terraform Apply:
+
+1. Stop promotion to subsequent environments.
+2. Preserve the failed GitHub Actions run and Terraform logs.
+3. Record the module version, deployment repository, and
+   affected environment.
+4. Determine whether Terraform changed any resources before
+   the failure.
+
+### State and Infrastructure Assessment
+
+Before attempting recovery:
+
+1. Inspect the actual Azure resources.
+2. Review the current Terraform state.
+3. Run a fresh Terraform Plan against the current state.
+4. Identify any partially completed changes, drift, or
+   proposed resource replacements.
+
+Do not assume that a failed Apply left infrastructure unchanged.
+
+### Recovery Decision
+
+Choose one of the following approaches:
+
+**Forward-fix:** Correct the underlying issue and apply the
+approved configuration.
+
+**Rollback:** Restore the previous module reference only after
+reviewing the resulting Terraform Plan and resource impact.
+
+Reverting source code alone does not guarantee restoration of
+the previous infrastructure state.
+
+### Recovery Controls
+
+- Do not manually modify Terraform state without an approved
+  recovery procedure.
+- Do not rerun destructive operations without impact review.
+- Preserve approval and audit requirements during recovery.
+- Escalate shared module defects to Platform Engineering.
+- Resume PROD promotion only after DEV recovery and validation.
+
+### Recovery Completion
+
+Record:
+
+- Root cause.
+- Resources affected.
+- Recovery action taken.
+- Final Terraform Plan and Apply results.
+- Verification outcome.
+- Follow-up actions to prevent recurrence.
