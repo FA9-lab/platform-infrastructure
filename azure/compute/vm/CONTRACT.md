@@ -98,6 +98,18 @@ review and an explicit migration strategy.
 | Terraform VM module | Platform Engineering | Standardized VM implementation |
 | Azure landing zone | Azure Cloud Foundation | Subscriptions, networking, policy, and cloud governance |
 
+### Abstraction Boundary
+
+Consumers interact with the capability through the Backstage request
+interface and their generated deployment repository. Platform Engineering
+owns the reusable implementation behind that interface, including
+Terraform modules and execution workflows. Azure Cloud Foundation owns
+the underlying landing-zone services and governance controls.
+
+Changes within an implementation layer should preserve the documented
+consumer contract unless a deliberate contract version change and
+migration plan are approved.
+
 ## 8. Current MVP Limitations
 
 - Azure resource selections use static template options or
