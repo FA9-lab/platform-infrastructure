@@ -51,3 +51,33 @@
 **Outstanding requirements:**
 
 **Approved by:**
+
+## Release Decision — Terraform VM Module v2.1.0
+
+**Component:** Azure VM Terraform module
+
+**Current released version:** v2.0.0
+
+**Proposed version:** v2.1.0
+
+**Change:** Add the platform-managed `PlatformCapability` resource tag.
+
+**Contract compatibility:** No consumer input or lifecycle interface
+changes. Capability contract remains at version 1.0.
+
+**Status:** NOT READY
+
+### Outstanding Requirements
+
+- [ ] Terraform formatting and validation.
+- [ ] Representative Terraform Plan review.
+- [ ] Confirm resource update or replacement impact.
+- [ ] Document release notes and recovery approach.
+- [ ] Obtain release approval.
+
+### Decision
+
+Do not publish v2.1.0 until the outstanding requirements are met.
+
+The change remains merged in main but is not part of the
+existing immutable v2.0.0 release.
