@@ -60,3 +60,42 @@ of module versions consumed by deployment repositories.
 
 Until automated inventory is introduced, version visibility
 requires inspection of deployment repository configuration.
+
+## 3. Incident Routing and Escalation
+
+### Initial Triage
+
+The deployment owner begins triage using the failed GitHub Actions
+run, Terraform error output, and deployment repository configuration.
+
+The issue is routed according to the underlying failure domain,
+not merely the tool where the error appeared.
+
+### Failure Ownership
+
+| Failure Domain | Primary Owner |
+|---|---|
+| Deployment-specific inputs or configuration | Deployment Owner |
+| Shared Terraform module defect | Platform Engineering |
+| Reusable GitHub Actions workflow defect | Platform Engineering |
+| Azure networking or landing-zone configuration | Azure Cloud Foundation |
+| Azure Policy enforcement or policy assignment | Azure Cloud Foundation |
+| Platform-managed GitHub OIDC configuration | Platform Engineering, with Identity/Security support |
+
+### Escalation Procedure
+
+1. Record the affected deployment repository and workflow run.
+2. Capture the relevant error without exposing credentials or secrets.
+3. Identify whether the failure is deployment-specific or shared.
+4. Route the incident to the responsible team.
+5. Document the resolution and any required platform changes.
+6. Retry through the approved deployment lifecycle.
+
+### Operational Safeguards
+
+- Do not bypass Azure Policy or GitHub approval controls.
+- Do not manually edit Terraform state as a routine recovery method.
+- Do not rerun destructive operations without reviewing their impact.
+- Escalate failures affecting multiple deployments as potential
+  shared-platform incidents.
+
