@@ -398,3 +398,7 @@ For each deployment, record:
 - Approval reference.
 - Apply and verification results.
 - PROCEED, PAUSE, or ABORT decision.
+
+Situation	Response
+Unauthorized manual change	Investigate and normally restore the declared configuration
+Approved emergency change	Record the change, reconcile Terraform configuration, and review the resulting Plan
