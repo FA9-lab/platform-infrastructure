@@ -98,3 +98,77 @@ not merely the tool where the error appeared.
 - Do not rerun destructive operations without reviewing their impact.
 - Escalate failures affecting multiple deployments as potential
   shared-platform incidents.
+
+## 4. Platform Release Management
+
+### Independently Versioned Components
+
+The Azure VM capability depends on two independently released
+shared components:
+
+1. Terraform VM module, maintained in platform-infrastructure.
+2. Reusable GitHub Actions workflows, maintained in platform-workflows.
+
+Each component has its own release history and compatibility
+assessment.
+
+### Release References
+
+Production deployment repositories must reference immutable
+Terraform module releases and controlled workflow releases.
+
+Feature branches and moving branches such as main are not
+approved production release references.
+
+Terraform modules are referenced using release tags.
+Reusable workflows should be referenced using immutable
+commit SHAs, with versioned release tags used for discovery
+and release documentation.
+
+### Versioning Policy
+
+Shared components follow semantic versioning:
+
+- PATCH: Backward-compatible defect corrections.
+- MINOR: Backward-compatible enhancements.
+- MAJOR: Breaking changes requiring consumer action.
+
+Version classification must consider deployment impact,
+not only source-code compatibility.
+
+A release that changes Terraform resource identity or causes
+resource replacement requires explicit impact documentation,
+even when the module input interface remains compatible.
+
+### Release Requirements
+
+Before publishing a shared component release:
+
+1. Review the changes and compatibility implications.
+2. Run appropriate automated validation.
+3. Document expected infrastructure or execution impact.
+4. Record any migration or rollback requirements.
+5. Publish release notes and an immutable release reference.
+
+### Consumer Upgrade Policy
+
+Publishing a shared release does not automatically upgrade
+existing deployment repositories.
+
+Deployment owners adopt new versions through reviewed changes,
+using the established Terraform Plan and Apply process.
+
+Critical security releases may require coordinated upgrade
+deadlines and escalation, but do not silently modify
+deployment repositories.
+
+### Current MVP Exceptions
+
+Existing deployment repositories reference reusable workflows
+through a mutable feature branch.
+
+This is accepted for the lab but must be corrected before
+production adoption.
+
+The unreleased Terraform tag enhancement merged during Lab 8
+requires validation before a new module release is published.
