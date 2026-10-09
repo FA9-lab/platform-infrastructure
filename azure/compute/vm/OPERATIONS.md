@@ -348,3 +348,53 @@ Record:
 - Final Terraform Plan and Apply results.
 - Verification outcome.
 - Follow-up actions to prevent recurrence.
+
+## 8. Upgrade Rollout Decision Gates
+
+### Rollout Decisions
+
+Each upgrade stage must result in an explicit decision:
+
+| Decision | Criteria | Required Action |
+|---|---|---|
+| PROCEED | Expected Plan, required approvals, successful Apply and verification | Continue to the next approved deployment |
+| PAUSE | Unexpected Plan, incomplete evidence, or unresolved deployment failure | Stop promotion and investigate |
+| ABORT | Confirmed shared defect, unacceptable infrastructure impact, or security concern | Stop rollout and initiate corrective action |
+
+### Pre-Apply Gate
+
+Before applying an upgrade:
+
+1. Confirm the target module version is an approved release.
+2. Review the deployment-specific Terraform Plan.
+3. Identify resource updates, replacements, and deletions.
+4. Confirm required approvals and recovery readiness.
+
+### Post-Apply Gate
+
+Before promoting to another deployment or environment:
+
+1. Confirm Terraform Apply completed successfully.
+2. Verify the expected Azure resources and configuration.
+3. Confirm the deployment meets its operational requirements.
+4. Record the outcome and authorize the next rollout stage.
+
+### Rollout-Wide Safeguards
+
+- Pause promotion when an unexpected pattern of failures emerges.
+- Do not treat successful Terraform execution as sufficient
+  evidence of application health.
+- Do not bypass environment-specific approvals.
+- Keep unaffected deployments pinned to their existing versions
+  until promotion is authorized.
+
+### Rollout Record
+
+For each deployment, record:
+
+- Deployment repository and environment.
+- Previous and target module versions.
+- Terraform Plan impact.
+- Approval reference.
+- Apply and verification results.
+- PROCEED, PAUSE, or ABORT decision.
