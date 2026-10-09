@@ -229,3 +229,64 @@ skeleton workflows with references to reviewed release SHAs.
 
 Existing lab repositories are not modified as part of this
 documentation exercise.
+
+## 6. Controlled Module Upgrade Procedure
+
+### Standard Rollout Sequence
+
+1. Platform Engineering publishes a validated module release
+   with compatibility notes and upgrade instructions.
+
+2. Identify deployment repositories consuming older versions.
+
+3. Select a representative DEV deployment for the initial rollout.
+
+4. Update the DEV deployment repository to reference the approved
+   module version.
+
+5. Open a pull request and review the Terraform Plan.
+
+6. Confirm whether the plan contains in-place updates,
+   resource replacements, or unexpected changes.
+
+7. Obtain approval and apply the DEV change through the
+   established GitHub workflow.
+
+8. Verify the deployment and its required functionality.
+
+9. Record the outcome before scheduling the PROD upgrade.
+
+10. Repeat the reviewed change, Plan, approval, Apply, and
+    verification process independently for PROD.
+
+### Promotion Gate
+
+PROD adoption requires:
+
+- A successfully validated DEV rollout.
+- Review of the PROD-specific Terraform Plan.
+- Approval of any destructive or replacement operations.
+- Confirmation of recovery readiness.
+- Authorization from the PROD deployment owner.
+
+### Failure Handling
+
+If DEV fails, pause promotion to PROD.
+
+Investigate the failure and determine whether to:
+
+- Correct the deployment configuration.
+- Publish a corrected module release.
+- Restore the previous module reference when safe.
+
+Reverting a module reference does not guarantee infrastructure
+rollback. Recovery decisions must consider Terraform state
+and any resource changes already applied.
+
+### Current Lab Scope
+
+The Lab 7 DEV and PROD deployment repositories are retained,
+but their Azure infrastructure has been decommissioned.
+
+This procedure is documented without performing a live
+infrastructure upgrade.
