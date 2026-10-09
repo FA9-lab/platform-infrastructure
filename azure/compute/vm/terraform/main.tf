@@ -8,6 +8,7 @@ locals {
     DeploymentId = var.deployment_id
     RequestId    = var.request_id
     ManagedBy    = "PELab-IDP"
+    PlatformCapability = "azure-linux-vm"
   }
 }
 
