@@ -172,3 +172,60 @@ production adoption.
 
 The unreleased Terraform tag enhancement merged during Lab 8
 requires validation before a new module release is published.
+
+## 5. Reusable Workflow Release Management
+
+### Current State
+
+Generated deployment repositories currently reference reusable
+GitHub Actions workflows using the mutable branch
+`feature/deployment-repo-plan`.
+
+This is a lab-only configuration and is not an approved
+production release strategy.
+
+### Target State
+
+Platform Engineering publishes reviewed workflow releases
+from the platform-workflows repository.
+
+Each workflow release must:
+
+1. Identify a specific reviewed Git commit.
+2. Pass applicable workflow validation and testing.
+3. Document compatibility with generated deployment repositories.
+4. Include release notes and upgrade instructions.
+5. Provide an immutable commit SHA for consumers.
+
+### Consumer References
+
+Production deployment repositories reference reusable workflows
+using full Git commit SHAs.
+
+Human-readable release tags are maintained for release discovery
+and documentation.
+
+Workflow upgrades require reviewed changes to the caller
+repository. Publishing a new workflow release does not
+automatically change existing caller references.
+
+### Workflow Compatibility
+
+A workflow release must assess changes to:
+
+- Required workflow inputs and secrets.
+- GitHub permissions and OIDC authentication.
+- Terraform initialization and execution behavior.
+- Plan, Apply, and Destroy lifecycle semantics.
+- Expected outputs and failure handling.
+
+Breaking changes require an explicit migration plan.
+
+### Current Migration Requirement
+
+Before production adoption, replace mutable workflow branch
+references in generated deployment repositories and Backstage
+skeleton workflows with references to reviewed release SHAs.
+
+Existing lab repositories are not modified as part of this
+documentation exercise.
