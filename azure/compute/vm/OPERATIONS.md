@@ -402,3 +402,82 @@ For each deployment, record:
 Situation	Response
 Unauthorized manual change	Investigate and normally restore the declared configuration
 Approved emergency change	Record the change, reconcile Terraform configuration, and review the resulting Plan
+
+## 9. Operational Failure Recovery
+
+### 9.1 Configuration Drift
+
+Configuration drift occurs when actual Azure resources differ from
+the Terraform configuration stored in the deployment repository.
+
+Detection:
+- Run Terraform Plan through the deployment repository's PR workflow.
+- Review the proposed changes and identify the source of drift.
+- Determine whether the Azure change was authorized.
+
+Recovery options:
+
+**Option A — Restore declared configuration**
+- Keep the Terraform configuration unchanged.
+- Review the plan showing the required corrective changes.
+- Merge the approved PR to trigger Apply.
+- Verify Azure resources match the declared configuration.
+
+**Option B — Adopt an approved emergency change**
+- Update Terraform configuration to match the approved Azure change.
+- Open a PR and verify the Terraform Plan.
+- Merge the PR even if Terraform reports no infrastructure changes.
+- Verify the main-branch Apply succeeds.
+
+Never adopt an unauthorized change simply to eliminate drift.
+
+### 9.2 Interrupted Terraform Execution
+
+A cancelled GitHub Actions workflow does not guarantee that
+Terraform operations were rolled back.
+
+Recovery:
+1. Inspect the cancelled or failed workflow logs.
+2. Determine whether Terraform Apply had started.
+3. Check for Azure operations still in progress.
+4. Verify Terraform state accessibility and lock status.
+5. Run a fresh Terraform Plan.
+6. Review the plan before retrying Apply.
+
+Do not automatically rerun a potentially interrupted Apply without
+understanding the current infrastructure state.
+
+### 9.3 Terraform State Lock Contention
+
+The Azure Blob backend uses blob leases to protect Terraform state.
+
+When a lock prevents an operation:
+
+1. Identify the deployment and exact state blob.
+2. Check for active GitHub Actions workflows targeting that deployment.
+3. Determine whether another Terraform process is still running.
+4. Inspect the blob's lease status in Azure.
+5. Wait for an active operation to finish and release its lock.
+6. Retry only when the state is safe to access.
+
+If a lock appears stale:
+- Escalate to the platform operations owner.
+- Confirm no Terraform process or Azure operation remains active.
+- Record the incident and recovery decision.
+- Use Terraform's supported unlock procedure when appropriate.
+- Break an Azure Blob lease manually only as a controlled last resort.
+
+Never delete or overwrite a Terraform state blob to resolve a lock.
+
+### 9.4 Operational Evidence
+
+For Day-2 incidents, retain:
+- Deployment repository and environment.
+- GitHub Actions run and relevant logs.
+- Terraform Plan output.
+- Azure resource observations.
+- Recovery action and approval.
+- Final verification result.
+
+The deployment repository remains the source of truth for the
+desired infrastructure configuration.
