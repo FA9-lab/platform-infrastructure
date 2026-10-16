@@ -1,8 +1,3 @@
-variable "subscription_id" {
-  description = "Azure subscription ID"
-  type        = string
-}
-
 module "storage_account" {
   source = "git::https://github.com/FA9-lab/platform-infrastructure.git//azure/storage/account/terraform?ref=main"
 
