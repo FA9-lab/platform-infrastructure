@@ -1,0 +1,78 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+
+metadata:
+  name: azure-storage-account
+  title: Azure Storage Account
+  description: Provision a governed Azure Storage Account through the platform
+
+spec:
+  owner: user:guest
+  type: infrastructure
+
+  parameters:
+    - title: Deployment Information
+      required:
+        - application
+        - environment
+        - requestId
+      properties:
+        application:
+          title: Application
+          type: string
+          description: Application or workload using the storage account
+
+        environment:
+          title: Environment
+          type: string
+          enum:
+            - dev
+          default: dev
+
+        requestId:
+          title: Request / Change ID
+          type: string
+          description: Enterprise request or change record for traceability
+
+    - title: Azure Configuration
+      required:
+        - storageAccountName
+      properties:
+        storageAccountName:
+          title: Storage Account Name
+          type: string
+          description: Globally unique name, 3–24 lowercase letters or numbers
+          pattern: '^[a-z0-9]{3,24}$'
+
+  steps:
+    - id: generateId
+      name: Generate Deployment ID
+      action: platform:generate-deployment-id
+
+    - id: generate
+      name: Generate Azure Storage Deployment
+      action: fetch:template
+      input:
+        url: ./skeleton
+        values:
+          deploymentId: ${{ steps.generateId.output.deploymentId }}
+          application: ${{ parameters.application }}
+          environment: ${{ parameters.environment }}
+          requestId: ${{ parameters.requestId }}
+          storageAccountName: ${{ parameters.storageAccountName }}
+          region: eastus
+          resourceGroup: rg-idp-landingzone-dev
+
+    - id: publish
+      name: Publish Deployment Repository
+      action: publish:github
+      input:
+        repoUrl: github.com?owner=FA9-lab&repo=storage-${{ parameters.application }}-${{ parameters.environment }}-${{ steps.generateId.output.deploymentId }}-${{ parameters.requestId }}
+        defaultBranch: main
+        description: Azure Storage deployment managed by PELab IDP
+        repoVisibility: public
+
+  output:
+    links:
+      - title: Deployment Repository
+        url: ${{ steps['publish'].output.remoteUrl }}
